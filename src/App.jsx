@@ -86,8 +86,8 @@ function App() {
 
     const earnMinutes = qty * smv * 100;
     const lines = Math.ceil(Number(days / lead));
-    const qco = mp * 10 * lines;
-    const availableMinutes = mp * 600 * days + qco;
+    const qco = (gmt === "Woven" ? 65 : mp) * 5 * lines;
+    const availableMinutes = (gmt === "Woven" ? 65 : mp) * 600 * days + qco;
 
     const eff = (earnMinutes / availableMinutes).toFixed(2);
     const cpm = (0.06 / (eff / 100)).toFixed(4);
@@ -144,7 +144,7 @@ function App() {
         <div className="input-grid">
           <div>
             <label htmlFor="qty">
-              <i class="fas fa-file"></i> Order Quantity:
+              <i class="fas fa-shirt"></i> Order Quantity:
             </label>
             <input
               type="number"
