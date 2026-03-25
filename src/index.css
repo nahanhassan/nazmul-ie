@@ -240,7 +240,7 @@ input[type="number"] {
   }
 }
 
-animation: scroll-right 10s linear infinite;
+
 
 @keyframes scroll-right {
   0% {
