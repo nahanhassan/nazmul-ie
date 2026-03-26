@@ -15,12 +15,17 @@ function App() {
       smv === "" ||
       mp === "" ||
       lead === "" ||
-      qty < 0 ||
-      smv < 0 ||
-      mp < 0 ||
-      lead < 0
+      qty <= 0 ||
+      smv <= 0 ||
+      mp <= 0 ||
+      lead <= 0
     ) {
-      setResult("❌ Please Check Inputs");
+      setResult("⚠️ Please Check Inputs");
+      return;
+    }
+
+    if (!Number.isInteger(qty) || !Number.isInteger(mp)) {
+      setResult("❌ Qty and Manpower must be whole numbers");
       return;
     }
 
@@ -158,6 +163,8 @@ function App() {
               id="qty"
               placeholder="Write Quantities..."
               value={qty}
+              step="1"
+              min="1"
               onChange={(e) => {
                 setQty(Number(e.target.value));
               }}
@@ -191,6 +198,8 @@ function App() {
               id="smv"
               placeholder="What is SMV?"
               value={smv}
+              step="0.01"
+              min="0.01"
               onChange={(e) => {
                 setSmv(Number(e.target.value));
               }}
@@ -205,6 +214,8 @@ function App() {
               id="mp"
               placeholder="Required Manpower..."
               value={gmt === "Woven" ? 65 : mp}
+              step="1"
+              min="1"
               onChange={(e) => {
                 setMp(Number(e.target.value));
               }}
