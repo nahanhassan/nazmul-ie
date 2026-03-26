@@ -124,7 +124,14 @@ function App() {
               name="gmt"
               value="Woven"
               checked={gmt === "Woven"}
-              onChange={(e) => setGmt(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                setGmt(value);
+
+                if (value === "Woven") {
+                  setMp(65); // set default once
+                }
+              }}
             />
             Woven Project
           </label>
