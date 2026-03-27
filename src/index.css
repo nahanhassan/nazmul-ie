@@ -43,6 +43,11 @@ h2 {
   opacity: 0.8;
 }
 
+h3 {
+  text-align: center;
+  opacity: 0.8;
+}
+
 .radio-group {
   display: flex;
   gap: 20px;

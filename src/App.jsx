@@ -25,7 +25,7 @@ function App() {
     }
 
     if (!Number.isInteger(qty) || !Number.isInteger(mp)) {
-      setResult("❌ Qty and Manpower must be whole numbers");
+      setResult("❌ Order Quantity and Manpower must be whole numbers");
       return;
     }
 
@@ -96,12 +96,11 @@ function App() {
 
     const eff = (earnMinutes / availableMinutes).toFixed(2);
     const cpm = (0.06 / (eff / 100)).toFixed(4);
-    const tgt = Math.round((hTarget * eff) / 1000);
+    //const tgt = Math.round((hTarget * eff) / 1000);
 
     setResult(
       <>
-        ✅ Efficiency: {eff}% <br />
-        🎯 Target: {tgt} Pcs <br />
+        🎯 Efficiency: {eff}% <br />
         💰 CPM ≥ ${cpm}
       </>,
     );
@@ -112,6 +111,7 @@ function App() {
   return (
     <>
       <div className="container">
+        <h3>الله أكبر</h3>
         <h1> Pretty Group</h1>
         <div className="ticker-container">
           <h2 className="ticker">
@@ -222,28 +222,6 @@ function App() {
             />
           </div>
 
-          {/* 
-          <div>
-            <label htmlFor="reqMc">Layout Machines:</label>
-            <select
-              value={mcs}
-              onChange={(e) =>
-                setMcs(e.target.value ? Number(e.target.value) : "")
-              }
-            >
-              <option value="0">Select M/Cs</option>
-              <option value="12">12 M/Cs</option>
-              <option value="24">24 M/Cs</option>
-              <option value="30">30 M/Cs</option>
-              <option value="36">36 M/Cs</option>
-              <option value="42">42 M/Cs</option>
-              <option value="48">48 M/Cs</option>
-              <option value="54">54 M/Cs</option>
-              <option value="60">60 M/Cs</option>
-              <option value="66">66 M/Cs</option>
-              <option value="72">72 M/Cs</option>
-            </select>
-          </div>          */}
         </div>
         <button onClick={calEff}>
           {" "}
