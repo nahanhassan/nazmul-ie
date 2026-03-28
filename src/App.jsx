@@ -111,7 +111,7 @@ function App() {
   return (
     <>
       <div className="container">
-        <h3>الله أكبر</h3>
+        <h3>اللّٰهُ أَكْبَرُ</h3>
         <h1> Pretty Group</h1>
         <div className="ticker-container">
           <h2 className="ticker">
