@@ -82,7 +82,7 @@ function App() {
     let days = 0;
 
     while (total < qty) {
-      const index = days % Math.min(lead, curve.length - 1);
+      const index = days % Math.min(lead, curve.length);
       const daily = Math.round(curve[index] * hTarget);
 
       total += daily;
@@ -91,11 +91,11 @@ function App() {
 
     const earnMinutes = qty * smv * 100;
     const lines = Math.ceil(Number(days / lead));
-    const qco = (gmt === "Woven" ? 65 : mp) * 5 * lines;
-    const availableMinutes = (gmt === "Woven" ? 65 : mp) * 600 * days + qco;
+    const qco = (gmt === "Woven" ? 55 : mp) * 5 * lines;
+    const availableMinutes = (gmt === "Woven" ? 55 : mp) * 600 * days + qco;
 
     const eff = (earnMinutes / availableMinutes).toFixed(2);
-    const cpm = (0.06 / (eff / 100)).toFixed(4);
+    const cpm = (0.58 / (eff / 100)).toFixed(4);
     //const tgt = Math.round((hTarget * eff) / 1000);
 
     setResult(
@@ -115,8 +115,7 @@ function App() {
         <h1> Pretty Group</h1>
         <div className="ticker-container">
           <h2 className="ticker">
-            Pre-Costing Efficiency% Calculation | &#169; Nazmul N Hassan | Head
-            of Industrial Engineering | 2024
+            Pre-Costing Efficiency% Calculation | Nazmul N Hassan | Head of Industrial Engineering Department | &#169; 2024
           </h2>
         </div>
         <p>
@@ -134,7 +133,7 @@ function App() {
                 setGmt(value);
 
                 if (value === "Woven") {
-                  setMp(65); // set default once
+                  setMp(55); // set default once
                 }
               }}
             />
@@ -182,10 +181,10 @@ function App() {
               }
             >
               <option value="0">Select Lead Time</option>
-              <option value="6">30 Days</option>
-              <option value="12">60 Days</option>
-              <option value="18">90 Days</option>
-              <option value="24">120 Days</option>
+              <option value="12">30 Days</option>
+              <option value="18">60 Days</option>
+              <option value="24">90 Days</option>
+              <option value="30">120 Days</option>
             </select>
           </div>
 
@@ -213,7 +212,7 @@ function App() {
               type="number"
               id="mp"
               placeholder="Required Manpower..."
-              value={gmt === "Woven" ? 65 : mp}
+              value={gmt === "Woven" ? 55 : mp}
               step="1"
               min="1"
               onChange={(e) => {
