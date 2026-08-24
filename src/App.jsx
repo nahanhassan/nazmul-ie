@@ -102,9 +102,10 @@ function App() {
     setResult(
       <>
         📊 Efficiency: {eff}% <br />
-        🎯 Target: {tgt} <br />
+        🎯 Target: {tgt}Pcs <br />
         💲 CPM ≥ ${cpm} <br />
-        💰 CM ≥ ${cm}
+        💰 CM ≥ ${cm} <br />
+        🧩 Lines: ${lines}
         
       </>,
     );
