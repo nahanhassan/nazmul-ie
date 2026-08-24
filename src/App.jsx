@@ -95,13 +95,17 @@ function App() {
     const availableMinutes = (gmt === "Woven" ? 55 : mp) * 600 * days + qco;
 
     const eff = (earnMinutes / availableMinutes).toFixed(2);
-    const cpm = (0.58 / (eff / 100)).toFixed(4);
-    //const tgt = Math.round((hTarget * eff) / 1000);
+    const tgt = Math.round((hTarget * eff) / 1000);
+    const cpm = (0.058 / (eff / 100)).toFixed(4);    
+    const cm = (smv * cpm).toFixed(4);
 
     setResult(
       <>
         🎯 Efficiency: {eff}% <br />
-        💰 CPM ≥ ${cpm}
+        🎯 Target: {tgt} <br />
+        💰 CPM ≥ ${cpm} <br />
+        💰 CM ≥ ${cpm} <br />
+        
       </>,
     );
   };
