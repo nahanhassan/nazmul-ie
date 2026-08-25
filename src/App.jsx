@@ -107,7 +107,7 @@ function App() {
         💲 CPM ≥ ${cpm} <br />
         💰 CM ≥ ${cm} <br />
         🪜 Line: {lines} Lines <br />
-        🧩 Line Cost: ${lines}        
+        🧩 Line Cost: ${lc}        
       </>,
     );
   };
