@@ -10,106 +10,129 @@ function App() {
   const [result, setResult] = useState("");
 
   const calEff = () => {
-    if (
-      qty === "" ||
-      smv === "" ||
-      mp === "" ||
-      lead === "" ||
-      qty <= 0 ||
-      smv <= 0 ||
-      mp <= 0 ||
-      lead <= 0
-    ) {
-      setResult("⚠️ Please Check Inputs");
-      return;
-    }
+  // Validate inputs
+  if (
+    qty === "" ||
+    smv === "" ||
+    mp === "" ||
+    lead === "" ||
+    qty <= 0 ||
+    smv <= 0 ||
+    mp <= 0 ||
+    lead <= 0
+  ) {
+    setResult("⚠️ Please Check Inputs");
+    return;
+  }
 
-    if (!Number.isInteger(qty) || !Number.isInteger(mp)) {
-      setResult("❌ Order Quantity and Manpower must be whole numbers");
-      return;
-    }
+  // Whole number validation
+  if (!Number.isInteger(qty) || !Number.isInteger(mp)) {
+    setResult("❌ Order Quantity and Manpower must be whole numbers");
+    return;
+  }
 
-    const cat = (smv) => {
-      if (smv <= 4.5) return "b_1";
-      if (smv <= 7.5) return "b_2";
-      if (smv <= 11.5) return "s_1";
-      if (smv <= 15) return "s_2";
-      if (smv <= 18.5) return "c_1";
-      if (smv <= 22) return "c_2";
-      if (smv <= 25) return "h_1";
-      return "h_2";
-    };
+  // SMV Category
+  const cat =
+    smv <= 4.5
+      ? "b_1"
+      : smv <= 7.5
+      ? "b_2"
+      : smv <= 11.5
+      ? "s_1"
+      : smv <= 15
+      ? "s_2"
+      : smv <= 18.5
+      ? "c_1"
+      : smv <= 22
+      ? "c_2"
+      : smv <= 25
+      ? "h_1"
+      : "h_2";
 
-    const lCurve = {
-      b_1: [
-        0.4, 0.5, 0.6, 0.7, 0.75, 0.75, 0.75, 0.8, 0.8, 0.85, 0.85, 0.85, 0.85,
-        0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85,
-      ],
-      b_2: [
-        0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.75, 0.75, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8,
-        0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8,
-      ],
-      s_1: [
-        0.25, 0.35, 0.45, 0.55, 0.6, 0.65, 0.65, 0.7, 0.7, 0.75, 0.75, 0.75,
-        0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
-      ],
-      s_2: [
-        0.2, 0.3, 0.4, 0.5, 0.55, 0.6, 0.6, 0.6, 0.65, 0.7, 0.7, 0.7, 0.7, 0.7,
-        0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7,
-      ],
-      c_1: [
-        0.15, 0.25, 0.35, 0.45, 0.55, 0.55, 0.6, 0.6, 0.6, 0.65, 0.65, 0.65,
-        0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65,
-      ],
-      c_2: [
-        0.15, 0.25, 0.35, 0.45, 0.55, 0.55, 0.55, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
-        0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
-      ],
-      h_1: [
-        0.1, 0.2, 0.3, 0.4, 0.5, 0.5, 0.5, 0.55, 0.55, 0.6, 0.6, 0.6, 0.6, 0.6,
-        0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
-      ],
-      h_2: [
-        0.1, 0.2, 0.3, 0.4, 0.5, 0.5, 0.5, 0.5, 0.55, 0.55, 0.55, 0.55, 0.55,
-        0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55,
-      ],
-    };
+  // Learning Curve
+  // First 10 days + final plateau value
+  const lCurve = {
+    b_1: [[0.4, 0.5, 0.6, 0.7, 0.75, 0.75, 0.75, 0.8, 0.8, 0.85], 0.85],
 
-    const hTarget = Math.round((600 * mp) / smv);
-    const curve = lCurve[cat(smv)];
+    b_2: [[0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.75, 0.75, 0.8, 0.8], 0.8],
 
-    let total = 0;
-    let days = 0;
+    s_1: [[0.25, 0.35, 0.45, 0.55, 0.6, 0.65, 0.65, 0.7, 0.7, 0.75], 0.75],
 
-    while (total < qty) {
-      const index = days % Math.min(lead, curve.length);
-      const daily = Math.round(curve[index] * hTarget);
+    s_2: [[0.2, 0.3, 0.4, 0.5, 0.55, 0.6, 0.6, 0.6, 0.65, 0.7], 0.7],
 
-      total += daily;
-      days++;
-    }
+    c_1: [[0.15, 0.25, 0.35, 0.45, 0.55, 0.55, 0.6, 0.6, 0.6, 0.65], 0.65],
 
-    const earnMinutes = qty * smv * 100;
-    const lines = Math.ceil(Number(days / lead));
-    const qco = (gmt === "Woven" ? 55 : mp) * 5 * lines;
-    const availableMinutes = (gmt === "Woven" ? 55 : mp) * 600 * days + qco;
+    c_2: [[0.15, 0.25, 0.35, 0.45, 0.55, 0.55, 0.55, 0.6, 0.6, 0.6], 0.6],
 
-    const eff = (earnMinutes / availableMinutes).toFixed(2);
-    const tgt = Math.round((hTarget * eff) / 1000);
-    const cpm = (0.058 / (eff / 100)).toFixed(4);    
-    const cm = (smv * cpm).toFixed(4);
+    h_1: [[0.1, 0.2, 0.3, 0.4, 0.5, 0.5, 0.5, 0.55, 0.55, 0.6], 0.6],
 
-    setResult(
-      <>
-        📊 Efficiency: {eff}% <br />
-        🎯 Target: {tgt} Pcs <br />
-        💲 CPM ≥ ${cpm} <br />
-        💰 CM ≥ ${cm} <br />
-        🧩 Lines: {lines} Lines
-        
-      </>,
-    );
+    h_2: [[0.1, 0.2, 0.3, 0.4, 0.5, 0.5, 0.5, 0.5, 0.55, 0.55], 0.55],
   };
+
+  const [curve, finalValue] = lCurve[cat];
+
+  // Target based on manpower and SMV
+  const hTarget = Math.round((600 * mp) / smv);
+
+  // Calculate required days
+  let total = 0;
+  let days = 0;
+
+  while (total < qty) {
+    // Use curve for first 10 days,
+    // then use final plateau value
+    const efficiency = curve[days] ?? finalValue;
+
+    const daily = Math.round(efficiency * hTarget);
+
+    total += daily;
+    days++;
+  }
+
+  // Calculate number of lines
+  const lines = Math.ceil(days / lead);
+
+  // QCO calculation
+  const qco = (gmt === "Woven" ? 55 : mp) * 5 * lines;
+
+  // Available minutes
+  const availableMinutes =
+    (gmt === "Woven" ? 55 : mp) * 600 * days + qco;
+
+  // Earned minutes
+  const earnMinutes = qty * smv * 100;
+
+  // Efficiency
+  const eff = (earnMinutes / availableMinutes * 100).toFixed(2);
+
+  // Target
+  const tgt = Math.round((hTarget * Number(eff)) / 1000);
+
+  // CPM
+  const cpm = (0.06 / (Number(eff) / 100)).toFixed(4);
+
+  // CM
+  const cm = (smv * Number(cpm)).toFixed(2);
+
+  // Line Cost
+  const lc = (
+    (gmt === "Woven" ? 55 : mp) *
+    600 *
+    0.06
+  ).toFixed(0);
+
+  // Result
+  setResult(
+    <>
+      📊 Efficiency: {eff}% <br />
+      🎯 Target: {tgt} Pcs <br />
+      💲 CPM ≥ ${cpm} <br />
+      💰 CM ≥ ${cm} <br />
+      🪜 Line: {lines} Lines <br />
+      🧩 Line Cost: ${lc}
+    </>
+  );
+};
 
   //HTML form Starts-->
 
