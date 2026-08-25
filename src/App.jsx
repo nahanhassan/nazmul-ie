@@ -103,7 +103,7 @@ function App() {
   const earnMinutes = qty * smv * 100;
 
   // Efficiency
-  const eff = (earnMinutes / availableMinutes * 100).toFixed(2);
+  const eff = (earnMinutes / availableMinutes).toFixed(2);
 
   // Target
   const tgt = Math.round((hTarget * Number(eff)) / 1000);
