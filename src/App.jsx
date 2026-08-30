@@ -27,78 +27,61 @@ function App() {
     if (!Number.isInteger(qty) || !Number.isInteger(mp)) {
       setResult("❌ Order Quantity and Manpower must be whole numbers");
       return;
-    }
+      }
+
+        const lCurve = {
+        vb_1: [40, 50, 60, 70, 75, 75, 75, 80, 80, 85],
+        b_2: [30, 40, 50, 60, 70, 75, 75, 75, 80, 80],
+        sc_1: [25, 35, 45, 55, 60, 65, 65, 70, 70, 75],
+        sc_2: [20, 30, 40, 50, 55, 60, 60, 60, 65, 70],
+        c_1: [15, 25, 35, 45, 55, 55, 60, 60, 60, 65],
+        c_2: [15, 25, 35, 45, 55, 55, 55, 60, 60, 60],
+        hc_1: [10, 20, 30, 40, 50, 50, 50, 55, 55, 60],
+        hc_2: [10, 20, 30, 40, 50, 50, 50, 50, 55, 55],
+  };
 
     const cat = (smv) => {
-      if (smv <= 4.5) return "b_1";
+      if (smv <= 4.5) return "vb_1";
       if (smv <= 7.5) return "b_2";
-      if (smv <= 11.5) return "s_1";
-      if (smv <= 15) return "s_2";
+      if (smv <= 11.5) return "sc_1";
+      if (smv <= 15) return "sc_2";
       if (smv <= 18.5) return "c_1";
       if (smv <= 22) return "c_2";
-      if (smv <= 25) return "h_1";
-      return "h_2";
+      if (smv <= 25) return "hc_1";
+      return "hc_2";
     };
 
-    const lCurve = {
-      b_1: [
-        0.4, 0.5, 0.6, 0.7, 0.75, 0.75, 0.75, 0.8, 0.8, 0.85, 0.85, 0.85, 0.85,
-        0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85,
-      ],
-      b_2: [
-        0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.75, 0.75, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8,
-        0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8,
-      ],
-      s_1: [
-        0.25, 0.35, 0.45, 0.55, 0.6, 0.65, 0.65, 0.7, 0.7, 0.75, 0.75, 0.75,
-        0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75,
-      ],
-      s_2: [
-        0.2, 0.3, 0.4, 0.5, 0.55, 0.6, 0.6, 0.6, 0.65, 0.7, 0.7, 0.7, 0.7, 0.7,
-        0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7,
-      ],
-      c_1: [
-        0.15, 0.25, 0.35, 0.45, 0.55, 0.55, 0.6, 0.6, 0.6, 0.65, 0.65, 0.65,
-        0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65,
-      ],
-      c_2: [
-        0.15, 0.25, 0.35, 0.45, 0.55, 0.55, 0.55, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
-        0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
-      ],
-      h_1: [
-        0.1, 0.2, 0.3, 0.4, 0.5, 0.5, 0.5, 0.55, 0.55, 0.6, 0.6, 0.6, 0.6, 0.6,
-        0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
-      ],
-      h_2: [
-        0.1, 0.2, 0.3, 0.4, 0.5, 0.5, 0.5, 0.5, 0.55, 0.55, 0.55, 0.55, 0.55,
-        0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55, 0.55,
-      ],
-    };
 
     const hTarget = Math.round((600 * mp) / smv);
     const curve = lCurve[cat(smv)];
 
     let total = 0;
     let days = 0;
+    const dailyProduction = [];
 
     while (total < qty) {
-      const index = days % Math.min(lead, curve.length);
-      const daily = Math.round(curve[index] * hTarget);
+    const efficiency = curve[Math.min(days % lead, curve.length - 1)];
+    const production = Math.round((efficiency * hTarget) / 100);
 
-      total += daily;
-      days++;
+    const actual = Math.min(production, qty - total);
+    dailyProduction.push(actual);
+    days += 1;
+    total += actual;
     }
 
-    const earnMinutes = qty * smv * 100;
     const lines = Math.ceil(Number(days / lead));
+    const earnMinutes = qty * smv * 100;
     const qco = (gmt === "Woven" ? 55 : mp) * 5 * lines;
     const availableMinutes = (gmt === "Woven" ? 55 : mp) * 600 * days + qco;
-
     const eff = (earnMinutes / availableMinutes).toFixed(2);
+    
     const tgt = Math.round((hTarget * eff) / 1000);
     const cpm = (0.06 / (eff / 100)).toFixed(4);    
     const cm = (smv * cpm).toFixed(2);
-    const lc = ((gmt === "Woven" ? 55 : mp) * 600 *0.06).toFixed(0);
+    const lCost = ((gmt === "Woven" ? 55 : mp) * 600 *0.06).toFixed(0);
+    const tCost = lCost * days;
+    const tRevenue = qty * cm;
+    const profitLoss = tRevenue - tCost;
 
     setResult(
       <>
@@ -106,8 +89,11 @@ function App() {
         🎯 Target: {tgt} Pcs <br />
         💲 CPM ≥ ${cpm} <br />
         💰 CM ≥ ${cm} <br />
+        💰 Days ≥ {days} Days <br />
         🪜 Line: {lines} Lines <br />
-        🧩 Line Cost: ${lc}        
+        🧩 Line Cost: ${lCost} <br />    
+        🧩 Profit/Loss: ${profitLoss} <br />   
+        🪜Ladder: {dailyProduction.slice(0, 100).join(" - ")        
       </>,
     );
   };
