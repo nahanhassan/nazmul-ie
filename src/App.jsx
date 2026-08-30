@@ -93,7 +93,7 @@ function App() {
         🪜 Line: {lines} Lines <br />
         🧩 Line Cost: ${lCost} <br />    
         🧩 Profit/Loss: ${profitLoss} <br />   
-        🪜Ladder: {dailyProduction.slice(0, 100).join(" - ")        
+        🪜Ladder: {dailyProduction.slice(0, 100).join(" - ")}        
       </>,
     );
   };
